@@ -1,4 +1,4 @@
-const moneySpan = document.querySelector('span.money');
+const moneySpan = document.querySelector('.container header .right span.money');
 const walletWheatSpan = document.querySelector('span.showWheatAmount');
 const walletGoldSpan = document.querySelector('span.showGoldAmount');
 const walletLumberSpan = document.querySelector('span.showLumberAmount');
@@ -7,16 +7,11 @@ const walletCottonSpan = document.querySelector('span.showCottonAmount');
 const walletCoffeeSpan = document.querySelector('span.showCoffeeAmount');
 const walletSugarSpan = document.querySelector('span.showSugarAmount');
 
-let saveWheat = document.cookie;
-let saveGold = document.cookie;
-let saveLumber = document.cookie;
-let savePalmOil = document.cookie;
-let saveCotton = document.cookie;
-let saveCoffee = document.cookie;
-let saveSugar = document.cookie;
-
 let money = 3000;
-const dayDuration = 1500;
+const dayDuration = 3500;
+
+let day = 1;
+let days = [];
 
 const log = (msg) => (console.log(msg));
 
@@ -34,87 +29,37 @@ const changeValue = (productPrice, arrayName, positiveValue, negativeValue) => {
 };
 
 const showWallet = (span, productAmount, unit) => {
- if (window.location === '127.0.0.1:4625/pages/index.html') {
-  span.innerHtml = productAmount + ' ' + unit;
-  span.textContent = productAmount + ' ' + unit;
- }
+ span.innerHtml = productAmount + ' ' + unit;
+ span.textContent = productAmount + ' ' + unit;
 };
-
-function updateCookie(cname, cvalue, exdays) {
- const d = new Date();
- // log(d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000)))
- document.cookie = `${cname}=${cvalue}`;
-}
-
-// function getCookie(cname) {
-//  var name = cname + "=";
-//  var ca = document.cookie.split(';')[];
-// }
-
-
-
-
 
 let wallet = {
- /* TODO: SELECT COOKIE VALUE */
- wheatAmount: 48,
- /* TODO: SELECT COOKIE VALUE */
- goldAmount: 74,
- /* TODO: SELECT COOKIE VALUE */
- lumberAmount: 74,
- /* TODO: SELECT COOKIE VALUE */
- palmOilAmount: 74,
- /* TODO: SELECT COOKIE VALUE */
- cottonAmount: 74,
- /* TODO: SELECT COOKIE VALUE */
- coffeeAmount: 74,
- /* TODO: SELECT COOKIE VALUE */
- sugarAmount: 5
- /* TODO: SELECT COOKIE VALUE */
+ wheatAmount: 0,
+ goldAmount: 0,
+ lumberAmount: 0,
+ palmOilAmount: 0,
+ cottonAmount: 0,
+ coffeeAmount: 0,
+ sugarAmount: 0
 }
 
-// let days = [];
-// let daysCount = 1;
-
-const save = (art) => {
- updateCookie("Wheat", wallet.wheatAmount, 24);
- updateCookie("Gold", wallet.goldAmount, 24);
- updateCookie("Lumber", wallet.lumberAmount, 24);
- updateCookie("PalmOil", wallet.palmOilAmount, 24);
- updateCookie("Cotton", wallet.cottonAmount, 24);
- updateCookie("Coffee", wallet.coffeeAmount, 24);
- updateCookie("Sugar", wallet.sugarAmount, 24);
- updateCookie("Money", money, 24);
- // if (art === true) {
- //  alert(saveCoffee+' '+saveCotton+' '+saveGold+' '+saveLumber+' '+savePalmOil+' '+saveSugar+' '+saveWheat);
- //  console.log(typeof saveWheat);
- // }
-};
-
-const reloadMoney = (err) => {if (err) throw err; moneySpan.innerHTML = money + '💰'; moneySpan.textContent = money + '💰'};
 
 setInterval(() => {
- save();
- reloadMoney();
- showWallets();
+ // showWallets();
+ days.push(day)
+ day++;
+ // log(days)
  changeValue(wheatPrice, wheatArray, 20, -20);
- log(document.cookie)
- // console.log(daysCount);
- // days.push(daysCount)
- // daysCount++;
 }, dayDuration);
 
 const showWallets = () => {
- showWallet(walletWheatSpan, wallet.wheatAmount, 'kilograms');
- showWallet(walletGoldSpan, wallet.goldAmount, 'kilograms');
- showWallet(walletLumberSpan, wallet.lumberAmount, 'kilograms');
- showWallet(walletPalmOilSpan, wallet.palmOilAmount, 'liters');
- showWallet(walletCottonSpan, wallet.cottonAmount, 'kilograms');
- showWallet(walletCoffeeSpan, wallet.coffeeAmount, 'kilograms');
- showWallet(walletSugarSpan, wallet.sugarAmount, 'kilograms');
+ showWallet(document.querySelector('span.showWheatAmount'), wallet.wheatAmount, 'kilograms');
+ showWallet(document.querySelector('span.showGoldAmount'), wallet.goldAmount, 'kilograms');
+ showWallet(document.querySelector('span.showLumberAmount'), wallet.lumberAmount, 'kilograms');
+ showWallet(document.querySelector('span.showPalmOilAmount'), wallet.palmOilAmount, 'liters');
+ showWallet(document.querySelector('span.showCottonAmount'), wallet.cottonAmount, 'kilograms');
+ showWallet(document.querySelector('span.showCoffeeAmount'), wallet.coffeeAmount, 'kilograms');
+ showWallet(document.querySelector('span.showSugarAmount'), wallet.sugarAmount, 'kilograms');
 }
 
-window.onload = function() {
- reloadMoney();
- showWallets();
-};
+// window.onload = function() {showWallets();};

@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
  <meta charset="UTF-8">
  <meta http-equiv="X-UA-Compatible" content="IE=edge">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>Little Game</title>
  <link rel="stylesheet" href="../styles/main.css">
- <script async src="../scripts/main.js"></script>
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+ <script src="../scripts/main.js"></script>
+ <script src="../scripts/wallet.js" defer></script>
 </head>
-<body>
+
+<body onload="document.querySelector('.container header .right span.money').innerHTML = money + '💰';">
  <div class="container">
   <header>
    <span class="title">Little Game</span>
    <div class="right">
     <span class="money"></span>
-    <a href="./index.html">     
+    <span onclick="changePage('index')" href="./index.html">
      <span id="wallet">Inventory</span>
-    </a>
+    </span>
    </div>
   </header>
   <div class="content">
@@ -24,7 +30,7 @@
    <div class="commodities">
     <div class="col">
      <div class="value">
-      <div class="contentBox">       
+      <div class="contentBox">
        <img src="../img/wheat.png" alt="Wheat icon"><span>Wheat</span>
       </div>
       <span class="showWheatAmount"></span>
@@ -69,14 +75,105 @@
    </div>
   </div>
   <footer>
-   <a onclick="save()" href="./wheat.html"><img src="../img/wheat.png" alt="Wheat icon"><span>Wheat</span></a>
-   <a onclick="save()" href="./gold.html"><img src="../img/ingots.png" alt="Gold icon"><span>Gold</span></a>
-   <a onclick="save()" href="./lumber.html"><img src="../img/wood.png" alt="Lumber icon"><span>Lumber</span></a>
-   <a onclick="save()" href="./palm-oil.html"><img src="../img/palm-oil.png" alt="Palm oil icon"><span>Palm oil</span></a>
-   <a onclick="save()" href="./cotton.html"><img src="../img/cotton.png" alt="Cotton icon"><span>Cotton</span></a>
-   <a onclick="save()" href="./coffee.html"><img src="../img/coffee-beans.png" alt="Coffee icon"><span>Coffee</span></a>
-   <a onclick="save()" href="./sugar.html"><img src="../img/sugar.png" alt="Sugar icon"><span>Sugar</span></a>
+   <span onclick="changePage('wheat')" href="./wheat.html"><img src="../img/wheat.png"
+     alt="Wheat icon"><span>Wheat</span></span>
+   <span onclick="changePage('gold')" href="./gold.html"><img src="../img/ingots.png"
+     alt="Gold icon"><span>Gold</span></span>
+   <span onclick="changePage('lumber')" href="./lumber.html"><img src="../img/wood.png"
+     alt="Lumber icon"><span>Lumber</span></span>
+   <span onclick="changePage('palm-oil')" href="./palm-oil.html"><img src="../img/palm-oil.png"
+     alt="Palm oil icon"><span>Palm oil</span></span>
+   <span onclick="changePage('cotton')" href="./cotton.html"><img src="../img/cotton.png"
+     alt="Cotton icon"><span>Cotton</span></span>
+   <span onclick="changePage('coffee')" href="./coffee.html"><img src="../img/coffee-beans.png"
+     alt="Coffee icon"><span>Coffee</span></span>
+   <span onclick="changePage('sugar')" href="./sugar.html"><img src="../img/sugar.png"
+     alt="Sugar icon"><span>Sugar</span></span>
   </footer>
  </div>
+ <script>
+  var xValues = days;
+  var yValues = wheatArray;
+ 
+  setInterval(() => {
+   xValues = days;
+   yValues = wheatArray;
+  }, dayDuration);
+  const changePage = page => {
+   $.ajax({
+    url: page + '.html',
+    success: function (result) {
+     document.querySelector('body').innerHTML = result;
+     document.querySelector('.container header .right span.money').innerHTML = money + '💰';
+     // console.log(wallet.wheatAmount);
+     if (page === 'index') {
+      showWallets();
+     } else {
+      new Chart($("#chart"), {
+      type: "line",
+      data: {
+       labels: xValues,
+       datasets: [{
+        pointRadius: 4,
+        pointBackgroundColor: "rgba(0,0,255,1)",
+        data: yValues
+       }]
+      },
+      options: {
+       legend: {display: false}
+      }
+     });
+     }}
+   })};
+   setInterval(() => {
+    // Chart.data.labels = xValues 
+    // Chart.data.datasets.data = yValues
+     if (wheatArray.length > 15) {
+      days.shift();
+      wheatArray.shift();
+     }
+    
+    new Chart($("#chart"), {
+      type: "line",
+      data: {
+       labels: xValues,
+       datasets: [{
+        pointRadius: 4,
+        pointBackgroundColor: "rgba(0,0,255,1)",
+        data: yValues
+       }]
+      },
+      options: {
+       legend: {display: false},
+       responsiveAnimationDuration: 0.5,
+       scales: {
+        xAxes: [{
+         scaleLabel: {
+          display: true,
+          labelString: "Days",
+          fontFamily: "Montserrat",
+          fontColor: "black"
+         },
+         ticks: {
+          maxTicksLimit: 15
+         }
+        }],
+        yAxes: [{
+         scaleLabel: {
+          display: true,
+          labelString: "Wheat Price",
+          fontFamily: "Montserrat",
+          fontColor: "black",
+        },
+         ticks: {
+          maxTicksLimit: 10 
+         }
+        }]
+       }
+      }
+     });
+   }, dayDuration)
+ </script>
 </body>
+
 </html>
